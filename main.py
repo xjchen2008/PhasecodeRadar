@@ -24,7 +24,7 @@ def wavetable(N, phi = 0):
     distance = c * freq / k / 2.0  # = c/(2BW), because need an array of distance, so use freq to represent distance.
     #win=np.hamming(N)
     win=np.power(np.blackman(N), 1)
-    #win = 1
+    win = 1
     ##################
     # Create the chirp
     ##################
@@ -69,14 +69,14 @@ def phasecode(M):
 if __name__ == '__main__':
     c = 3e8
     j = 1j
-    M = 10
-    Fp0 = 200e3 # PRF Related to range resolution and range gate. full phase-coded signal is 1ms duration as FMCW SDR radar
+    M = 500
+    Fp0 = 10e3 # PRF Related to range resolution and range gate. full phase-coded signal is 1ms duration as FMCW SDR radar
     Fp = M * Fp0
     Tp0 = 1 / Fp0
     Tp = 1 / Fp
     k0 = 1 # ralated to freq response
     fs = 60e6
-    N = int(Tp * fs)
+    N = 10#int(Tp * fs)
     # N = 60
     #fs = N / Tp
     d_fs = 1/fs *c /2 # distance of spacing for each sample in time domain
@@ -112,7 +112,7 @@ if __name__ == '__main__':
     win_all = 1
     #win_all = np.blackman(M*N)
     x_win = np.multiply(x, win_all)
-    pc = fn.PulseCompr(rx = np.roll(x_win, 0), tx = x_win, win = 1, unit='linear')
+    pc = fn.PulseCompr(rx = np.roll(x_win, 10), tx = x_win, win = 1, unit='linear')
 
     #######
     # Plot
