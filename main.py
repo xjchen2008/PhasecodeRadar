@@ -23,7 +23,7 @@ def wavetable(N, phi = 0):
 
     distance = c * freq / k / 2.0  # = c/(2BW), because need an array of distance, so use freq to represent distance.
     #win=np.hamming(N)
-    win=np.power(np.blackman(N), 1)
+    #win=np.power(np.blackman(N), 1)
     win = 1
     ##################
     # Create the chirp
@@ -74,9 +74,9 @@ if __name__ == '__main__':
     Fp = M * Fp0
     Tp0 = 1 / Fp0
     Tp = 1 / Fp
-    k0 = 1 # ralated to freq response
+    k0 = 100 # ralated to freq response
     fs = 60e6
-    N = 10#int(Tp * fs)
+    N = int(Tp * fs)
     # N = 60
     #fs = N / Tp
     d_fs = 1/fs *c /2 # distance of spacing for each sample in time domain
