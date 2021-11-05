@@ -24,7 +24,7 @@ def wavetable(N, phi = 0):
 
     distance = c * freq / k / 2.0  # = c/(2BW), because need an array of distance, so use freq to represent distance.
     #win=np.hamming(N)
-    win=np.power(np.blackman(N), 1)
+    win=np.power(np.blackman(N), 2)
     #win = 1
     ##################
     # Create the chirp
@@ -54,12 +54,27 @@ def phasecode(M):
     #n = np.linspace(0, L0-1, L0)
     phi_1 = np.pi / M * (k0)#(k*1000) #+ np.exp(1)/10000
     phi = np.zeros(L0)
+    '''
+    for n in range(0, L0, 1):
+        #phi[n] = phi_1 * np.power(n, 2)
+        if n<L0/4:
+            phi[n] =  phi_1 * np.power(n, 2)
+        if L0/4 <= n < L0/2:
+            phi[n] = phi_1 * np.power(L0/2 -n, 2)
+        if L0/2 <= n < 3*L0/4:
+            phi[n] =  phi_1 * np.power(n-L0/2, 2)
+        if n >= L0 *3/ 4:
+            phi[n] = phi_1 * np.power(L0 -n, 2)
+    '''
+
+    # Previous initial phase
     for n in range(0, L0, 1):
         #phi[n] = phi_1 * np.power(n, 2)
         if n<L0/2:
             phi[n] =  phi_1 * np.power(n, 2)
         if n >= L0/2:
             phi[n] = phi_1 * np.power(L0 -n, 2)
+
     '''
     n = np.linspace(0, L0 - 1, L0)
     phi_n = phi_1 * np.power(n, 2)
@@ -70,17 +85,17 @@ def phasecode(M):
 if __name__ == '__main__':
     c = 3e8
     j = 1j
-    M = 10
+    M = 50
     Fp0 = 40e3 # PRF Related to range resolution and range gate. full phase-coded signal is 1ms duration as FMCW SDR radar
     Fp = M * Fp0
     Tp0 = 1 / Fp0
     Tp = 1 / Fp
-    k0 = 1# ralated to freq response
+    k0 = 10# ralated to freq response
     fs = 60e6
     N = int(Tp * fs)
     # N = 60
     #fs = N / Tp
-    d_fs = 1/fs *c /2 # distance of spacing for each sample in time domain
+    d_fs = 1/fs *c /2 # The "unit resolution" from unit sample time; distance of spacing for each sample in time domain
     print('d_fs=',d_fs, '\nfs=', fs/1e6,'MHz', '\nN=',N,
           '\nRange_resolution=',N * d_fs)
     '''
@@ -118,7 +133,7 @@ if __name__ == '__main__':
     x_win_BPF_real = dsp_filters_BPF.run(x_win.real,fs=fs, highcut=15e6, lowcut=5e6)
     x_win_BPF = hilbert(x_win_BPF_real)
     #x_win = x_win_BPF
-    pc = fn.PulseCompr(rx = np.roll(x_win, 30), tx = x_win, win = 1, unit='linear')
+    pc = fn.PulseCompr(rx = np.roll(x_win, 15), tx = x_win, win = 1, unit='linear')
 
     #######
     # Plot
