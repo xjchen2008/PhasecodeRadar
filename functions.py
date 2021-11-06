@@ -107,13 +107,13 @@ def PulseCompr(rx,tx,win, unit = 'log'):
     #pc_LPF = dsp_filters.main(signal=pc_timedomain, order=6, fs=250e6, cutoff=6e6, duration=1.6e-6)
     #pc_LPF_freqdomain = np.fft.fft(pc_LPF)
     # match filter method
-    #A = np.fft.fft(a)
-    #B = np.fft.fft(b)
-    #pc_mf = np.fft.ifft(np.multiply(B, np.conj(A)))
+    A = np.fft.fft(a)
+    B = np.fft.fft(b)
+    pc_mf = np.fft.ifft(np.multiply(A, np.conj(B)))
     if unit == 'log':
-        pc = 20 * np.log10(abs(pc))
+        pc = 20 * np.log10(abs(pc_mf))
     if unit =='linear':
-        pc = pc
+        pc = pc_mf
     return pc
 
 
