@@ -13,8 +13,9 @@ def wavetable(N, phi = 0):
     # Parameters
     #############
     # print (N)
-    t = np.linspace(0, Tp-Tp/N, N) # Subpulse duration # T=N/fs
-    bw = 10e6  # 20e6#20e6#45.0e5
+    #t = np.linspace(0, Tp-Tp/N, N) # Subpulse duration # T=N/fs # No the last point
+    t = np.linspace(0, Tp , N)  # With the last point
+    bw = 56e6  # 20e6#20e6#45.0e5
     fc = 0  # 50e6# 50e6#0e6
     f0 = fc - bw / 2  # -10e6#40e6 # Start Freq
     f1 = fc + bw / 2  # 10e6#60e6# fs/2=1/2*N/T#End freq
@@ -24,7 +25,8 @@ def wavetable(N, phi = 0):
 
     distance = c * freq / k / 2.0  # = c/(2BW), because need an array of distance, so use freq to represent distance.
     #win=np.hamming(N)
-    win=np.power(np.blackman(N), 2)
+    #win=np.power(np.blackman(N), 2)
+    win = np.power(np.hamming(N), 2)
     #win = 1
     ##################
     # Create the chirp
@@ -35,15 +37,15 @@ def wavetable(N, phi = 0):
     ##################
     # Create the sine
     ##################
-    y_s = np.sin(2*2*np.pi*fs/N*t+ phi)#+ np.sin(4*np.pi*fs/N*t)# just use LO to generate a LO. The
-    yq_s = np.sin(2*2*np.pi*fs/N*t-np.pi/2 + phi)# + np.sin(4*np.pi*fs/N*t-np.pi/2)
+    y_s = np.sin(1*2*np.pi*fs/N*t+ phi)#+ np.sin(4*np.pi*fs/N*t)# just use LO to generate a LO. The
+    yq_s = np.sin(1*2*np.pi*fs/N*t-np.pi/2 + phi)# + np.sin(4*np.pi*fs/N*t-np.pi/2)
     y_cx_sine1 = y_s + j * yq_s
     fo = 10e6
     y_s2 = np.sin(1*2*np.pi*fo*t)#+ np.sin(4*np.pi*fs/N*t)# just use LO to generate a LO. The
     yq_s2 = np.sin(1*2*np.pi*fo*t-np.pi/2)# + np.sin(4*np.pi*fs/N*t-np.pi/2)
     y_cx_sine2 = y_s2 + j * yq_s2
 
-    return np.multiply(y_cx_sine1, win)
+    return np.multiply(y_cx_chirp, win)
 
 
 def phasecode(M):
@@ -79,25 +81,25 @@ def phasecode(M):
     n = np.linspace(0, L0 - 1, L0)
     phi_n = phi_1 * np.power(n, 2)
     '''
+    #phi = np.zeros(L0)
     return phi
 
 
 if __name__ == '__main__':
     c = 3e8
     j = 1j
-    M = 50
-    Fp0 = 40e3 # PRF Related to range resolution and range gate. full phase-coded signal is 1ms duration as FMCW SDR radar
+    M = 10 # tune with Fp0 to increase range gate or range ambiguity
+    Fp0 = 2*16e3 # PRF Related to range resolution and range gate. full phase-coded signal is 1ms duration as FMCW SDR radar
     Fp = M * Fp0
     Tp0 = 1 / Fp0
     Tp = 1 / Fp
     k0 = 10# ralated to freq response
-    fs = 60e6
+    fs = 56e6*10
     N = int(Tp * fs)
-    # N = 60
-    #fs = N / Tp
+    '''N = 60
+    fs = N / Tp'''
     d_fs = 1/fs *c /2 # The "unit resolution" from unit sample time; distance of spacing for each sample in time domain
-    print('d_fs=',d_fs, '\nfs=', fs/1e6,'MHz', '\nN=',N,
-          '\nRange_resolution=',N * d_fs)
+    print('d_fs=',d_fs, '\nfs=', fs/1e6,'MHz', '\nN=',N,',fs*N=',fs/1e6/N,'MHz,','M=',M,'\nRange_resolution=',N * d_fs)
     '''
     c = 3e8
     j = 1j
@@ -116,7 +118,8 @@ if __name__ == '__main__':
     #Rs = R0 + i * R_del
     #R_mi = Rs + m * del_d
     Rmax = c * Tp0 /2 # Eqn(1) in the paper
-    distance = c/2* freq/(M*np.power(Fp0, 2))/k0#np.linspace(-0.5*Rmax, 0.5*Rmax, M*N) #M = Ng?
+    distance = c/2* freq/(M*np.power(Fp0, 2))/k0#phase coding radar np.linspace(-0.5*Rmax, 0.5*Rmax, M*N) #M = Ng?
+    distance = c / 2 * freq / (56e6/Tp)#FMCW radar
 
     x = []
     for m in range(0,M):
@@ -140,9 +143,15 @@ if __name__ == '__main__':
     #######
 
     fn.plot_freq_db(freq, x_win, normalize=False, domain='time')
+    #plt.plot(fftshift(freq), fftshift(20*np.log10(abs(np.fft.fft(x_win,axis=0)))))
     plt.title('FFT of Phase-coded Signal')
     plt.figure()
     plt.plot(x_win.real,'*-')
+
+
+
+
+
 
     plt.title('Phase-coded Signal')
     plt.figure()
@@ -162,4 +171,13 @@ if __name__ == '__main__':
     plt.ylabel('Magnitude [dB]')
     plt.grid()
     plt.xlim([-1000, 1000])
+    '''
+    plt.figure()
+    del_F= np.linspace(0,100e6, 100) # Fourier transform frequency resoltuion
+    del_R = c/(2*del_F)
+    plt.plot(del_F/1e6, del_R)
+    plt.title('Tunning Map for best del_f and del_R')
+    plt.xlabel('Frequency Resolutijon [MHz]')
+    plt.xlabel('Range Resolutijon [m]')
+    '''
     plt.show()
