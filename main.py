@@ -45,7 +45,7 @@ def wavetable(N, phi = 0):
     yq_s2 = np.sin(1*2*np.pi*fo*t-np.pi/2)# + np.sin(4*np.pi*fs/N*t-np.pi/2)
     y_cx_sine2 = y_s2 + j * yq_s2
 
-    return np.multiply(y_cx_chirp, win)
+    return np.multiply(y_cx_sine1, win)
 
 
 def phasecode(M):
@@ -90,7 +90,7 @@ if __name__ == '__main__':
     j = 1j
     bw = 56e6  #FMCW chirp bandwidth 20e6#20e6#45.0e5
     M = 100 # tune with Fp0 to increase range gate or range ambiguity
-    Fp0 = 10*16e3 # PRF Related to range resolution and range gate. full phase-coded signal is 1ms duration as FMCW SDR radar
+    Fp0 = 20*16e3/1 # PRF Related to range resolution and range gate. full phase-coded signal is 1ms duration as FMCW SDR radar
     Fp = M * Fp0
     Tp0 = 1 / Fp0
     Tp = 1 / Fp
