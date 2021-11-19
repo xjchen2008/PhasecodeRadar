@@ -121,17 +121,17 @@ if __name__ == '__main__':
     j = 1j
     bw = 20e6  #FMCW chirp bandwidth 20e6#20e6#45.0e5
     M = 1 # tune with Fp0 to increase range gate or range ambiguity
-    Fp0 = 20e3 # PRF Related to range resolution and range gate. full phase-coded signal is 1ms duration as FMCW SDR radar
+    Fp0 = 1e3 # PRF Related to range resolution and range gate. full phase-coded signal is 1ms duration as FMCW SDR radar
     Fp = M * Fp0
     Tp0 = 1 / Fp0
     Tp = 1 / Fp
-    k0 = 20# ralated to freq response; This is also related to the cycle/ period of the phase coding signal
+    k0 = 100# ralated to freq response; This is also related to the cycle/ period of the phase coding signal
     fs = 20e6
     N = int(Tp * fs)
     uprate = 10
     d_fs = 1/fs *c /2 # The "unit resolution" from unit sample time; distance of spacing for each sample in time domain
     #Rmax = c * Tp0 /2 # Eqn(1) in the paper
-    print('d_fs=',d_fs, '\nfs=', fs/1e6,'MHz', '\nN=',N,'M=',M,',fs*N=',fs/1e6/N,'MHz,',
+    print('d_fs=',d_fs, '\nfs=', fs/1e6,'MHz', '\nN=',N,'M=',M,',fs/N=',fs/1e6/N,'MHz,',
           '\nPulse_Radar_Range_resolution=',N * d_fs,';FMCW_Radar_Range_resolution=',c/(2*bw))
 
     freq = np.fft.fftfreq(N*M*uprate, d=1. / (fs*uprate))
