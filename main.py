@@ -27,7 +27,7 @@ def wavetable(N, phi = 0):
     #win=np.hamming(N)
     #win=np.power(np.blackman(N), 2)
     win = np.power(np.hanning(N), 1)
-    #win = 1
+    win = 1
     ##################
     # Create the chirp
     ##################
@@ -130,15 +130,15 @@ if __name__ == '__main__':
     bw = 56e6  #FMCW chirp bandwidth 20e6#20e6#45.0e5
     a = 0.1
     M =int(1) #int(50 /a)  # tune with Fp0 to increase range gate or range ambiguity
-    Fp0 = 16e3*10/1.6/1 #16e3 * a # PRF Related to range resolution and range gate. full phase-coded signal is 1ms duration as FMCW SDR radar
+    Fp0 = 16e3*10/1.6/10#16e3 * a # PRF Related to range resolution and range gate. full phase-coded signal is 1ms duration as FMCW SDR radar
     Fp = M * Fp0
     Tp0 = 1 / Fp0
     Tp = 1 / Fp
-    k0 = 1# ralated to freq response
+    k0 = 100# ralated to freq response
     fs = 20e6
     N = int(Tp * fs) #20
-    uprate = 100
-    roll = 550
+    uprate = 2
+    roll = 1
     '''N = 60
     fs = N / Tp'''
     d_fs = 1/fs *c /2 # The "unit resolution" from unit sample time; distance of spacing for each sample in time domain

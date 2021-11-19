@@ -101,7 +101,7 @@ def PulseCompr(rx,tx,win, unit = 'log'):
     a = np.multiply(rx,win)  #np.power(win, 10)#np.multiply(win,win) # Add window here
     b = np.multiply(tx,np.power(win, 0))  #np.power(win, 10)#np.multiply(win,win)#tx
     mix = b * np.conj(a)  # 1. time domain element wise multiplication.
-    pc = np.fft.fft(mix)  # 2. Fourier transform.
+    pc_stretch = np.fft.fft(mix)  # 2. Fourier transform.
     # Add LPF
     #pc_timedomain = np.fft.ifft(pc)
     #pc_LPF = dsp_filters.main(signal=pc_timedomain, order=6, fs=250e6, cutoff=6e6, duration=1.6e-6)
@@ -214,6 +214,10 @@ def channel_est(psi_orth, y_cx_received):
     c = np.dot(np.linalg.inv(R_H),R_yH)
     #print('Shape of c is', c.shape)
     return c, H
+
+
+def plot_freq_traditional(x):
+    plt.plot(fftshift(20 * np.log10(abs(np.fft.fft(x, axis=0)))))
 
 
 def plot_freq_db(freq, x, color='b', normalize=False, domain='freq'):
