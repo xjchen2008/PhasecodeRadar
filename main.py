@@ -44,7 +44,7 @@ def wavetable(N, win= True, phi = 0):
     t = np.linspace(0, Tp, N)  # With the last point
     n = np.linspace(0, N-1, N)
     #n = np.linspace(0, N, N + 1)
-    fc = 20e6  # 50e6# 50e6#0e6
+    fc = 15e6  # 50e6# 50e6#0e6
     f0 = fc - bw / 2  # -10e6#40e6 # Start Freq
     f1 = fc + bw / 2  # 10e6#60e6# fs/2=1/2*N/T#End freq
     # print('f0 = ',f0/1e6, 'MHz;', 'f1=', f1/1e6, 'MHz')
@@ -57,6 +57,7 @@ def wavetable(N, win= True, phi = 0):
     if win == True:
         win_con = []
         win_0 = np.power(np.hanning(N/k0), 1)
+        #win_0 = np.power(np.blackman(N / k0), 1)
         for idx in range(k0):
             win_con = np.concatenate((win_con, win_0))
         win = win_con
@@ -108,7 +109,7 @@ def wavetable(N, win= True, phi = 0):
 
     #plt.plot(phase_mod,'o-')
     #plt.show()
-    return np.multiply(y_cx_sine4, win)
+    return np.multiply(y_cx_woo, win)
 
 
 def phasecode(M):
@@ -168,17 +169,17 @@ if __name__ == '__main__':
     j = 1j
 
     a = 0.1
-    M =int(10) #int(50 /a)  # tune with Fp0 to increase range gate or range ambiguity
-    Fp0 = 16e3*10/1.6/10/2*10#16e3 * a # PRF Related to range resolution and range gate. full phase-coded signal is 1ms duration as FMCW SDR radar
+    M =int(100) #int(50 /a)  # tune with Fp0 to increase range gate or range ambiguity
+    Fp0 = 10e5*3/2/100#16e3 * a # PRF Related to range resolution and range gate. full phase-coded signal is 1ms duration as FMCW SDR radar
     Fp = M * Fp0
     Tp0 = 1 / Fp0
     Tp = 1 / Fp
     k0 = 1# ralated to freq response
-    fs = 20e6
+    fs = 60e6
     N = int(Tp * fs) #20
     uprate = 2
     roll = 1
-    bw = fs #56e6  # FMCW chirp bandwidth 20e6#20e6#45.0e5
+    bw = 20e6 #56e6  # FMCW chirp bandwidth 20e6#20e6#45.0e5
     '''N = 60
     fs = N / Tp'''
     d_fs = 1/fs *c /2 # The "unit resolution" from unit sample time; distance of spacing for each sample in time domain
@@ -202,7 +203,7 @@ if __name__ == '__main__':
     x = []
     for m in range(0,M):
         phi = phasecode(M)
-        x = np.concatenate((x,wavetable(N=N, win=True, phi=phi[m])))
+        x = np.concatenate((x,wavetable(N=N, win=False, phi=phi[m])))
         #x = np.concatenate((x, coe.y_cx))
     #x = wavetable(N = M*N, phi = 0)
 
@@ -268,7 +269,7 @@ if __name__ == '__main__':
     pc_db = (20 * np.log10(abs(pc)))
     pc_db_normalized = pc_db - pc_db.max()
     plt.figure()
-    plt.plot(distance, fftshift(pc_db_normalized), 'k*-')  # Matched Filter PC
+    plt.plot(distance, fftshift(pc_db), 'k*-')  # Matched Filter PC
     #plt.plot( fftshift(pc_woo_db_normalized), 'k*-')  # Matched Filter PC
     #plt.plot( fftshift(pc_chirp_db_normalized), 'yo-')
     #plt.plot(fftshift(pc_woo_nowin_db_normalized), 'r^-')
