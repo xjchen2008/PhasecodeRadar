@@ -104,12 +104,12 @@ def wavetable(N, win= True, phi = 0):
                        #+ np.roll(y_cx_sine4_uprate, 32) + np.roll(y_cx_sine4_uprate, 64) \
                        #+ np.roll(y_cx_sine4_uprate, 128)
     y_cx_woo = fn.downsampling(y_cx_sine4_delay, uprate_)
-#    y_cx_woo = np.roll(y_cx_sine4, 1)+np.roll(y_cx_sine4, 2)
 
-
+    y_cx_pad = np.pad(np.multiply(y_cx_chirp, win),5*N,'constant')
+    noise = np.random.normal(0, 1e-3, len(y_cx_pad))
     #plt.plot(phase_mod,'o-')
     #plt.show()
-    return np.multiply(y_cx_woo, win)
+    return y_cx_pad +noise
 
 
 def phasecode(M):
@@ -170,7 +170,7 @@ if __name__ == '__main__':
 
     a = 0.1
     M =int(100) #int(50 /a)  # tune with Fp0 to increase range gate or range ambiguity
-    Fp0 = 10e5*3/2/100#16e3 * a # PRF Related to range resolution and range gate. full phase-coded signal is 1ms duration as FMCW SDR radar
+    Fp0 = 10e5/2/100*3#16e3 * a # PRF Related to range resolution and range gate. full phase-coded signal is 1ms duration as FMCW SDR radar
     Fp = M * Fp0
     Tp0 = 1 / Fp0
     Tp = 1 / Fp
@@ -178,7 +178,7 @@ if __name__ == '__main__':
     fs = 60e6
     N = int(Tp * fs) #20
     uprate = 2
-    roll = 1
+    roll = 501
     bw = 20e6 #56e6  # FMCW chirp bandwidth 20e6#20e6#45.0e5
     '''N = 60
     fs = N / Tp'''
@@ -203,7 +203,7 @@ if __name__ == '__main__':
     x = []
     for m in range(0,M):
         phi = phasecode(M)
-        x = np.concatenate((x,wavetable(N=N, win=False, phi=phi[m])))
+        x = np.concatenate((x,wavetable(N=N, win=True, phi=phi[m])))
         #x = np.concatenate((x, coe.y_cx))
     #x = wavetable(N = M*N, phi = 0)
 
@@ -213,6 +213,7 @@ if __name__ == '__main__':
     x_win_uprate = fn.upsampling(x_win, uprate)
     x_win_uprate_roll = np.roll(x_win_uprate, roll)
     x_win_delay = fn.downsampling(x_win_uprate_roll, uprate)
+    x_win_delay = x_win + 1e-3*x_win_delay
 
     #test()
 
@@ -233,8 +234,9 @@ if __name__ == '__main__':
     # Plot
     #######
 
-    fn.plot_freq_db(freq, x_win, normalize=False, domain='time')
+    #fn.plot_freq_db(freq, x_win, normalize=False, domain='time')
     #plt.plot(fftshift(freq), fftshift(20*np.log10(abs(np.fft.fft(x_win,axis=0)))))
+    plt.plot(fftshift(20 * np.log10(1e-1+abs(np.fft.fft(x_win, axis=0)))))
     plt.title('FFT of Phase-coded Signal')
     plt.figure()
     plt.plot(x_win.real,'*-')
@@ -269,7 +271,8 @@ if __name__ == '__main__':
     pc_db = (20 * np.log10(abs(pc)))
     pc_db_normalized = pc_db - pc_db.max()
     plt.figure()
-    plt.plot(distance, fftshift(pc_db), 'k*-')  # Matched Filter PC
+    #plt.plot(distance, fftshift(pc_db), 'k*-')  # Matched Filter PC
+    plt.plot(fftshift(pc_db), 'k*-')
     #plt.plot( fftshift(pc_woo_db_normalized), 'k*-')  # Matched Filter PC
     #plt.plot( fftshift(pc_chirp_db_normalized), 'yo-')
     #plt.plot(fftshift(pc_woo_nowin_db_normalized), 'r^-')
@@ -277,8 +280,8 @@ if __name__ == '__main__':
     #plt.legend(['P4 code + window', 'Chirp + Window', 'P4 code without Window'])
     #plt.plot((distance), pc_dc_normalized,'k*-') # Matched Filter PC
     #plt.plot(fftshift(distance), fftshift(20 * np.log10(abs(pc))), 'k*-') # PC = mixer method
-    #plt.xlabel('Sample Number')
-    plt.xlabel('Distance [m]')
+    plt.xlabel('Sample Number')
+    #plt.xlabel('Distance [m]')
     plt.ylabel('Magnitude [dB]')
     plt.grid()
     #plt.xlim([-100, 1000])
