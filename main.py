@@ -44,7 +44,7 @@ def wavetable(N, win= True, phi = 0):
     t = np.linspace(0, Tp, N)  # With the last point
     n = np.linspace(0, N-1, N)
     #n = np.linspace(0, N, N + 1)
-    fc = 0  # 50e6# 50e6#0e6
+    fc = 20e6  # 50e6# 50e6#0e6
     f0 = fc - bw / 2  # -10e6#40e6 # Start Freq
     f1 = fc + bw / 2  # 10e6#60e6# fs/2=1/2*N/T#End freq
     # print('f0 = ',f0/1e6, 'MHz;', 'f1=', f1/1e6, 'MHz')
@@ -85,6 +85,12 @@ def wavetable(N, win= True, phi = 0):
     y_p3 = np.sin(k0*np.pi/N*np.power(n,2))  # + np.sin(4*np.pi*fs/N*t)# just use LO to generate a LO. The
     yq_p3 = np.sin(k0*np.pi/N*np.power(n,2)-np.pi/2)  # + np.sin(4*np.pi*fs/N*t-np.pi/2)
     y_cx_sine3 = y_p3 + j * yq_p3
+
+    #F = fs/N * N/20
+    #omega = 2*np.pi*F
+    #y_p4 = np.sin(omega * t + k0*np.pi/N*n*(n-N))  # + np.sin(4*np.pi*fs/N*t)# just use LO to generate a LO. k0 is related to the cycle/ period of the phase coding signal
+    #yq_p4 = np.sin(omega*t -np.pi/2 + k0*np.pi/N*n*(n-N))  # + np.sin(4*np.pi*fs/N*t-np.pi/2)
+
     y_p4 = np.sin(k0*np.pi/N*n*(n-N))  # + np.sin(4*np.pi*fs/N*t)# just use LO to generate a LO. k0 is related to the cycle/ period of the phase coding signal
     yq_p4 = np.sin(k0*np.pi/N*n*(n-N)-np.pi/2)  # + np.sin(4*np.pi*fs/N*t-np.pi/2)
     y_cx_sine4 = y_p4 + j * yq_p4
@@ -162,17 +168,17 @@ if __name__ == '__main__':
     j = 1j
 
     a = 0.1
-    M =int(1) #int(50 /a)  # tune with Fp0 to increase range gate or range ambiguity
-    Fp0 = 16e3*10/1.6/10/2#16e3 * a # PRF Related to range resolution and range gate. full phase-coded signal is 1ms duration as FMCW SDR radar
+    M =int(10) #int(50 /a)  # tune with Fp0 to increase range gate or range ambiguity
+    Fp0 = 16e3*10/1.6/10/2*10#16e3 * a # PRF Related to range resolution and range gate. full phase-coded signal is 1ms duration as FMCW SDR radar
     Fp = M * Fp0
     Tp0 = 1 / Fp0
     Tp = 1 / Fp
-    k0 = 10# ralated to freq response
+    k0 = 1# ralated to freq response
     fs = 20e6
     N = int(Tp * fs) #20
     uprate = 2
     roll = 1
-    bw = fs#56e6  # FMCW chirp bandwidth 20e6#20e6#45.0e5
+    bw = fs #56e6  # FMCW chirp bandwidth 20e6#20e6#45.0e5
     '''N = 60
     fs = N / Tp'''
     d_fs = 1/fs *c /2 # The "unit resolution" from unit sample time; distance of spacing for each sample in time domain
@@ -196,7 +202,7 @@ if __name__ == '__main__':
     x = []
     for m in range(0,M):
         phi = phasecode(M)
-        x = np.concatenate((x,wavetable(N=N, win=False, phi=phi[m])))
+        x = np.concatenate((x,wavetable(N=N, win=True, phi=phi[m])))
         #x = np.concatenate((x, coe.y_cx))
     #x = wavetable(N = M*N, phi = 0)
 
@@ -221,7 +227,7 @@ if __name__ == '__main__':
     pc = fn.PulseCompr(rx=x_win_delay, tx=x_win, win=1, unit='linear')
     #pc = fn.PulseCompr(rx = hilbert(x_win_delay.real), tx = hilbert(x_win.real), win = 1, unit='linear')
     #pc = fn.PulseCompr(rx=x_win_delay.real, tx=x_win.real, win=1, unit='linear')
-
+    #np.save(file='data/pc.npy', arr=pc)
     #######
     # Plot
     #######
@@ -247,14 +253,31 @@ if __name__ == '__main__':
     '''
     #plt.xlim([-10, 10])
     #plt.ylim([-100, 100])
+    pc_woo_nowin=np.load('data/pc_woo_noWin_integer.npy')
+    pc_woo_nowin_db = (20 * np.log10(abs(pc_woo_nowin)))
+    pc_woo_nowin_db_normalized = pc_woo_nowin_db - pc_woo_nowin_db.max()
+
+    pc_woo=np.load('data/pc_woo_Win_integer.npy')
+    pc_woo_db = (20 * np.log10(abs(pc_woo)))
+    pc_woo_db_normalized = pc_woo_db - pc_woo_db.max()
+
+    pc_chirp=np.load('data/pc_chirp_Win_integer.npy')
+    pc_chirp_db = (20 * np.log10(abs(pc_chirp)))
+    pc_chirp_db_normalized = pc_chirp_db - pc_chirp_db.max()
+
     pc_db = (20 * np.log10(abs(pc)))
-    pc_dc_normalized = pc_db - pc_db.max()
+    pc_db_normalized = pc_db - pc_db.max()
     plt.figure()
-    plt.plot( fftshift(pc_dc_normalized), 'k*-')  # Matched Filter PC
+    plt.plot(distance, fftshift(pc_db_normalized), 'k*-')  # Matched Filter PC
+    #plt.plot( fftshift(pc_woo_db_normalized), 'k*-')  # Matched Filter PC
+    #plt.plot( fftshift(pc_chirp_db_normalized), 'yo-')
+    #plt.plot(fftshift(pc_woo_nowin_db_normalized), 'r^-')
+
+    #plt.legend(['P4 code + window', 'Chirp + Window', 'P4 code without Window'])
     #plt.plot((distance), pc_dc_normalized,'k*-') # Matched Filter PC
     #plt.plot(fftshift(distance), fftshift(20 * np.log10(abs(pc))), 'k*-') # PC = mixer method
-    plt.xlabel('Sample Number')
-    #plt.xlabel('Distance [m]')
+    #plt.xlabel('Sample Number')
+    plt.xlabel('Distance [m]')
     plt.ylabel('Magnitude [dB]')
     plt.grid()
     #plt.xlim([-100, 1000])
@@ -269,4 +292,3 @@ if __name__ == '__main__':
     plt.xlabel('Range Resolutijon [m]')
     '''
     plt.show()
-    np.save(file='waveform_phase_code', arr=x_win)
