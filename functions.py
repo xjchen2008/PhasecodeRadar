@@ -97,19 +97,25 @@ def equalizer(x, y, input, scale=500):
 
 
 def PulseCompr(rx,tx,win, unit = 'log'):
+
     # Mixer method pulse compression; Return a log scale beat frequency signal.
     a = np.multiply(rx,win)  #np.power(win, 10)#np.multiply(win,win) # Add window here
     b = np.multiply(tx,np.power(win, 0))  #np.power(win, 10)#np.multiply(win,win)#tx
+
     mix = b * np.conj(a)  # 1. time domain element wise multiplication.
     pc_stretch = np.fft.fft(mix)  # 2. Fourier transform.
     # Add LPF
     #pc_timedomain = np.fft.ifft(pc)
     #pc_LPF = dsp_filters.main(signal=pc_timedomain, order=6, fs=250e6, cutoff=6e6, duration=1.6e-6)
     #pc_LPF_freqdomain = np.fft.fft(pc_LPF)
+
     # match filter method
     A = np.fft.fft(a)
     B = np.fft.fft(b)
-    pc_mf = np.fft.ifft(np.multiply(A, np.conj(B)))
+    pc_mf = np.fft.ifft(np.multiply(B, np.conj(A)))
+
+    # Matched Filter Method Convolution
+    pc_mf_convolutionn = np.convolve(a,np.conj(b), 'same')
     if unit == 'log':
         pc = 20 * np.log10(abs(pc_mf))
     if unit =='linear':

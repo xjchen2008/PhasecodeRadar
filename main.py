@@ -169,13 +169,13 @@ if __name__ == '__main__':
     j = 1j
 
     a = 0.1
-    M =int(100) #int(50 /a)  # tune with Fp0 to increase range gate or range ambiguity
-    Fp0 = 10e5/2/100*3#16e3 * a # PRF Related to range resolution and range gate. full phase-coded signal is 1ms duration as FMCW SDR radar
+    M =int(10) #int(50 /a)  # tune with Fp0 to increase range gate or range ambiguity
+    Fp0 = 10e5/10*20#16e3 * a # PRF Related to range resolution and range gate. full phase-coded signal is 1ms duration as FMCW SDR radar
     Fp = M * Fp0
     Tp0 = 1 / Fp0
     Tp = 1 / Fp
     k0 = 1# ralated to freq response
-    fs = 60e6
+    fs = 800e6
     N = int(Tp * fs) #20
     uprate = 2
     roll = 501
@@ -213,7 +213,7 @@ if __name__ == '__main__':
     x_win_uprate = fn.upsampling(x_win, uprate)
     x_win_uprate_roll = np.roll(x_win_uprate, roll)
     x_win_delay = fn.downsampling(x_win_uprate_roll, uprate)
-    x_win_delay = x_win + 1e-3*x_win_delay
+    x_win_delay = x_win #+ 1e-3*x_win_delay
 
     #test()
 
@@ -226,8 +226,8 @@ if __name__ == '__main__':
     #x_win_0 = x_win[0:-1]
     x_win_0 = wavetable_ref(N=N-1, win=True, phi=phi[m])
     x_win_0_full = np.concatenate((np.array([0]), x_win_0))
-    pc = fn.PulseCompr(rx=x_win_delay, tx=x_win, win=1, unit='linear')
-    #pc = fn.PulseCompr(rx = hilbert(x_win_delay.real), tx = hilbert(x_win.real), win = 1, unit='linear')
+    #pc = fn.PulseCompr(rx=x_win_delay, tx=x_win, win=1, unit='linear')
+    pc = fn.PulseCompr(rx = hilbert(x_win_delay.real), tx = hilbert(x_win.real), win = 1, unit='linear')
     #pc = fn.PulseCompr(rx=x_win_delay.real, tx=x_win.real, win=1, unit='linear')
     #np.save(file='data/pc.npy', arr=pc)
     #######
