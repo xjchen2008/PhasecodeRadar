@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="91c67c1e-96ec-4101-92e2-69f103e159a8" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/coe_wavetable_4096.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/pc_chirp.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/pc_chirp_Win_integer.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/pc_chirp_noWin.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/pc_woo.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/pc_woo_Win_integer.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/pc_woo_noWin.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/pc_woo_noWin_integer.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/main_20211128_k0.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/waveform_phase_code.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/waveform_phase_code_chirp_nowin.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/waveform_phase_code_chirp_win.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/waveform_phase_code_p4_nowin.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/waveform_phase_code_p4_win.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="PUSH_TAGS">
+      <GitPushTagMode>
+        <option name="argument" value="--tags" />
+        <option name="title" value="All" />
+      </GitPushTagMode>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="ProjectId" id="2093Ly8pQgabnBjXS1Txd8D0OJk" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="restartRequiresConfirmation" value="false" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\James\Dropbox\PhasecodeRadar" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.main">
+    <configuration name="functions" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="PhasecodeRadar" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/functions.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="PhasecodeRadar" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="PhasecodeRadar" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main2.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main_20211128_k0" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="PhasecodeRadar" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main_20211128_k0.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="report" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="PhasecodeRadar" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/report.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.main" />
+        <item itemvalue="Python.main_20211128_k0" />
+        <item itemvalue="Python.main2" />
+        <item itemvalue="Python.report" />
+        <item itemvalue="Python.functions" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="91c67c1e-96ec-4101-92e2-69f103e159a8" name="Default Changelist" comment="" />
+      <created>1635442924311</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1635442924311</updated>
+    </task>
+    <task id="LOCAL-00001" summary="phi_1 = np.pi / M * (k*1000) &#10;M = 100  #&#10;k = 1&#10;N = int(100/ k) # Base-code length; This determines the range resolution;">
+      <created>1635596433110</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1635596433110</updated>
+    </task>
+    <task id="LOCAL-00002" summary="tune for the parameters v1">
+      <created>1635824231737</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1635824231738</updated>
+    </task>
+    <task id="LOCAL-00003" summary="phi_1 = np.pi / M * (k*1000) &#10;M = 100  #&#10;k = 1&#10;N = int(100/ k) # Base-code length; This determines the range resolution;">
+      <created>1635958912326</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1635958912326</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Before adding BPF&#10;fs= 60.0 MHz &#10;N= 12 &#10;Range_resolution= 30.0">
+      <created>1635963188932</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1635963188932</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Add a Blackman window on each of the sub-pulse to reduce the sidelobes of the signal in freq domain due to phase discontinuity.&#10;Need to consider the FFT frequency resolution del_f = fs/N">
+      <created>1636073451980</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1636073451980</updated>
+    </task>
+    <task id="LOCAL-00006" summary="d_fs= 2.5 &#10;fs= 60.0 MHz &#10;N= 30 &#10;Range_resolution= 75.0">
+      <created>1636082566449</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1636082566449</updated>
+    </task>
+    <task id="LOCAL-00007" summary="FMCW&#10;First pulse range 468.75m&#10;chirp bw =56e6&#10;N=1750, M=10">
+      <created>1636187286816</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1636187286816</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Matched Filter Pulse Compression Method Phase Coding.v1">
+      <created>1636235326040</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1636235326040</updated>
+    </task>
+    <task id="LOCAL-00009" summary="pulse radar">
+      <created>1636289682396</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1636289682396</updated>
+    </task>
+    <task id="LOCAL-00010" summary="    k0 = 20, N =1000, fs =20MHz">
+      <created>1637029465876</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1637029465876</updated>
+    </task>
+    <task id="LOCAL-00011" summary="p3 code with freq spacing between adjacent spectral lines">
+      <created>1637174182994</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1637174182994</updated>
+    </task>
+    <task id="LOCAL-00012" summary="As N increase from 1 to fs*T0, or as N increase from 1 to M*N, to occupy the full pulse, in freq domain, the P4 code points have more points represent the signal not in the noise floor. And the Pulse Compression plot, asn N increases, the ambiguity range increases which is good. The spectrum line spacing is f_spacing = fs/ N, where fs is sampling rate and N is subpulse sample number. Hence, the trade-off is spectrum line spacing and ambiguity range plus pulse compression processing gain. The PC processing gain has two folds: one is the full-pulse processing gain, which can be increased by using more sub-pulses ( increase M); the other fold is that the sub-pulse PC gain is purely determined by N which is fixed by considering spectrum line spacing.">
+      <created>1637179364791</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1637179364791</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Woo + P4">
+      <created>1637309900434</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1637309900434</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Matched Filter Pulse Compression can work with K0 &gt; 1&#10;Woo + P4">
+      <created>1637311933355</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1637311933355</updated>
+    </task>
+    <task id="LOCAL-00015" summary="20211128">
+      <created>1638112623315</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1638112623316</updated>
+    </task>
+    <task id="LOCAL-00016" summary="20211128v1">
+      <created>1638146820529</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1638146820529</updated>
+    </task>
+    <task id="LOCAL-00017" summary="20211128v2 pulse radar">
+      <created>1638153145702</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1638153145702</updated>
+    </task>
+    <task id="LOCAL-00018" summary="20211129v3 pulse radar fs = 60MHz, bw=20MHz">
+      <created>1638223338879</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1638223338880</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="tune for the parameters v1" />
+    <MESSAGE value="phi_1 = np.pi / M * (k*1000) &#10;M = 100  #&#10;k = 1&#10;N = int(100/ k) # Base-code length; This determines the range resolution;" />
+    <MESSAGE value="Before adding BPF&#10;fs= 60.0 MHz &#10;N= 12 &#10;Range_resolution= 30.0" />
+    <MESSAGE value="Add a Blackman window on each of the sub-pulse to reduce the sidelobes of the signal in freq domain due to phase discontinuity.&#10;Need to consider the FFT frequency resolution del_f = fs/N" />
+    <MESSAGE value="d_fs= 2.5 &#10;fs= 60.0 MHz &#10;N= 30 &#10;Range_resolution= 75.0" />
+    <MESSAGE value="FMCW&#10;First pulse range 468.75m&#10;chirp bw =56e6&#10;N=1750, M=10" />
+    <MESSAGE value="Matched Filter Pulse Compression Method Phase Coding.v1" />
+    <MESSAGE value="pulse radar" />
+    <MESSAGE value="    k0 = 20, N =1000, fs =20MHz" />
+    <MESSAGE value="p3 code with freq spacing between adjacent spectral lines" />
+    <MESSAGE value="As N increase from 1 to fs*T0, or as N increase from 1 to M*N, to occupy the full pulse, in freq domain, the P4 code points have more points represent the signal not in the noise floor. And the Pulse Compression plot, asn N increases, the ambiguity range increases which is good. The spectrum line spacing is f_spacing = fs/ N, where fs is sampling rate and N is subpulse sample number. Hence, the trade-off is spectrum line spacing and ambiguity range plus pulse compression processing gain. The PC processing gain has two folds: one is the full-pulse processing gain, which can be increased by using more sub-pulses ( increase M); the other fold is that the sub-pulse PC gain is purely determined by N which is fixed by considering spectrum line spacing." />
+    <MESSAGE value="Woo + P4" />
+    <MESSAGE value="Matched Filter Pulse Compression can work with K0 &gt; 1&#10;Woo + P4" />
+    <MESSAGE value="20211128" />
+    <MESSAGE value="20211128v1" />
+    <MESSAGE value="20211128v2 pulse radar" />
+    <MESSAGE value="20211129v3 pulse radar fs = 60MHz, bw=20MHz" />
+    <option name="LAST_COMMIT_MESSAGE" value="20211129v3 pulse radar fs = 60MHz, bw=20MHz" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/main2.py</url>
+          <line>65</line>
+          <option name="timeStamp" value="41" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/main2.py</url>
+          <line>60</line>
+          <option name="timeStamp" value="42" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/main.py</url>
+          <line>238</line>
+          <option name="timeStamp" value="55" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
