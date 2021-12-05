@@ -8,6 +8,7 @@ import functions as fn
 import dsp_filters_BPF
 from scipy.signal import hilbert
 import coe_wavetable_4096 as coe
+plt.rc('font', size=15)
 
 def wavetable_ref(N, win= True, phi = 0):
     n = np.linspace(0, N-1, N )
