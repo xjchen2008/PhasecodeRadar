@@ -43,8 +43,11 @@ def wavetable(N, win= True, phi = 0):
     # print (N)
     #t = np.linspace(0, Tp-Tp/N, N) # Subpulse duration # T=N/fs # No the last point
     t = np.linspace(0, Tp, N)  # With the last point
+    n1 = np.linspace((3*N/4), N-1, int(N/4))
+    n2 = np.linspace(0, (1 * N / 4 - 1), int(N / 4))
+    #n = np.concatenate([n2, (1.0+1.0*j)*np.zeros(int(N/2)), n1])
+    #k0=1
     n = np.linspace(0, N-1, N)
-    #n = np.linspace(0, N, N + 1)
     fc = 15e6  # 50e6# 50e6#0e6
     f0 = fc - bw / 2  # -10e6#40e6 # Start Freq
     f1 = fc + bw / 2  # 10e6#60e6# fs/2=1/2*N/T#End freq
@@ -52,7 +55,7 @@ def wavetable(N, win= True, phi = 0):
     k = bw / Tp  # (f1 - f0) / T
     phi0 = -np.pi / 2  # Phase
 
-    distance = c * freq / k / 2.0  # = c/(2BW), because need an array of distance, so use freq to represent distance.
+    #distance = c * freq / k / 2.0  # = c/(2BW), because need an array of distance, so use freq to represent distance.
     #win=np.hamming(N)
     #win=np.power(np.blackman(N), 2)
     if win == True:
@@ -76,8 +79,13 @@ def wavetable(N, win= True, phi = 0):
     ##################
     # Create the sine
     ##################
-    y_s = np.sin(1*2*np.pi*fs/N*t+ phi)#+ np.sin(4*np.pi*fs/N*t)# just use LO to generate a LO. The
-    yq_s = np.sin(1*2*np.pi*fs/N*t-np.pi/2 + phi)# + np.sin(4*np.pi*fs/N*t-np.pi/2)
+    # phase coding
+    #y_s = np.sin(1*2*np.pi*fs/N*t+ phi)#+ np.sin(4*np.pi*fs/N*t)# just use LO to generate a LO. The
+    #yq_s = np.sin(1*2*np.pi*fs/N*t-np.pi/2 + phi)# + np.sin(4*np.pi*fs/N*t-np.pi/2)
+    # No phase coding
+    y_s = np.sin(1 * 2 * np.pi * fs / N * t )  # + np.sin(4*np.pi*fs/N*t)# just use LO to generate a LO. The
+    yq_s = np.sin(1 * 2 * np.pi * fs / N * t - np.pi / 2 )  # + np.sin(4*np.pi*fs/N*t-np.pi/2)
+
     y_cx_sine1 = y_s + j * yq_s
     fo = 10e6
     y_s2 = np.sin(1*2*np.pi*fo*t)#+ np.sin(4*np.pi*fs/N*t)# just use LO to generate a LO. The
@@ -106,11 +114,11 @@ def wavetable(N, win= True, phi = 0):
                        #+ np.roll(y_cx_sine4_uprate, 128)
     y_cx_woo = fn.downsampling(y_cx_sine4_delay, uprate_)
 
-    y_cx_pad = np.pad(np.multiply(y_cx_chirp, win),5*N,'constant')
+    y_cx_pad = np.pad(np.multiply(y_cx_chirp, win),180,'constant')
     noise = np.random.normal(0, 1e-3, len(y_cx_pad))
     #plt.plot(phase_mod,'o-')
     #plt.show()
-    return y_cx_pad +noise
+    return y_cx_pad #np.multiply(y_cx_chirp, win) #np.multiply(y_cx_sine3, y_cx_sine3) #y_cx_sine4 #y_cx_pad +noise
 
 
 def phasecode(M):
@@ -171,16 +179,17 @@ if __name__ == '__main__':
 
     a = 0.1
     M =int(10) #int(50 /a)  # tune with Fp0 to increase range gate or range ambiguity
-    Fp0 = 10e5/10*20#16e3 * a # PRF Related to range resolution and range gate. full phase-coded signal is 1ms duration as FMCW SDR radar
+    Fp0 = 500e3#16e3 * a # PRF Related to range resolution and range gate. full phase-coded signal is 1ms duration as FMCW SDR radar
     Fp = M * Fp0
     Tp0 = 1 / Fp0
     Tp = 1 / Fp
     k0 = 1# ralated to freq response
-    fs = 800e6
+    fs = 200e6
     N = int(Tp * fs) #20
     uprate = 2
-    roll = 501
-    bw = 20e6 #56e6  # FMCW chirp bandwidth 20e6#20e6#45.0e5
+    roll = 121
+    bw = 40e6 #56e6  # FMCW chirp bandwidth 20e6#20e6#45.0e5
+    print('bw=' , bw)
     '''N = 60
     fs = N / Tp'''
     d_fs = 1/fs *c /2 # The "unit resolution" from unit sample time; distance of spacing for each sample in time domain
@@ -189,17 +198,12 @@ if __name__ == '__main__':
           '\nPulse_Radar_Range_resolution=',N * d_fs,';FMCW_Radar_Range_resolution=',c/(2*bw),
           '\nRmax=', Rmax)
 
-    freq = np.fft.fftfreq(N*M, d=1. / fs)
+
     del_d = 0.5* c * Tp # Echo trip spacing = range resolution; Sub-pulse duration determines range resolution
     R0 = 0
     del_Rg = del_d * 2
     #Rs = R0 + i * R_del
     #R_mi = Rs + m * del_d
-
-    #distance = c/2* freq/(M*np.power(Fp0, 2))/k0#phase coding radar np.linspace(-0.5*Rmax, 0.5*Rmax, M*N) #M = Ng?
-    #distance = c / 2 * freq / (bw/Tp)#FMCW radar PC=Stretch Method
-    Rmax1 = 1/ (fs / (N * M)) * c / 2 # 1/del_F *c/2
-    distance = np.linspace(0,Rmax1, N*M  )    # FMCW PC=Matched Filter radar
 
     x = []
     for m in range(0,M):
@@ -207,6 +211,12 @@ if __name__ == '__main__':
         x = np.concatenate((x,wavetable(N=N, win=True, phi=phi[m])))
         #x = np.concatenate((x, coe.y_cx))
     #x = wavetable(N = M*N, phi = 0)
+    freq = np.fft.fftfreq(len(x), d=1. / fs)
+    # distance = c/2* freq/(M*np.power(Fp0, 2))/k0#phase coding radar np.linspace(-0.5*Rmax, 0.5*Rmax, M*N) #M = Ng?
+    # distance = c / 2 * freq / (bw/Tp)#FMCW radar PC=Stretch Method
+    #distance = c/(2*freq) # matched filter method
+    Rmax1 = len(x) * c / (2*fs)  # 1/del_F *c/2
+    distance = np.linspace(0, Rmax1, len(x))  # FMCW PC=Matched Filter radar
 
     win_all = 1
     #win_all = np.blackman(M*N)
@@ -214,7 +224,7 @@ if __name__ == '__main__':
     x_win_uprate = fn.upsampling(x_win, uprate)
     x_win_uprate_roll = np.roll(x_win_uprate, roll)
     x_win_delay = fn.downsampling(x_win_uprate_roll, uprate)
-    x_win_delay = x_win #+ 1e-3*x_win_delay
+    x_win_delay = x_win #+np.roll(x_win, roll) #x_win_delay
 
     #test()
 
@@ -227,8 +237,8 @@ if __name__ == '__main__':
     #x_win_0 = x_win[0:-1]
     x_win_0 = wavetable_ref(N=N-1, win=True, phi=phi[m])
     x_win_0_full = np.concatenate((np.array([0]), x_win_0))
-    #pc = fn.PulseCompr(rx=x_win_delay, tx=x_win, win=1, unit='linear')
-    pc = fn.PulseCompr(rx = hilbert(x_win_delay.real), tx = hilbert(x_win.real), win = 1, unit='linear')
+    pc = fn.PulseCompr(rx=x_win_delay, tx=x_win, win=1, unit='linear')
+    #pc = fn.PulseCompr(rx = hilbert(x_win_delay.real), tx = hilbert(x_win.real), win = 1, unit='linear')
     #pc = fn.PulseCompr(rx=x_win_delay.real, tx=x_win.real, win=1, unit='linear')
     #np.save(file='data/pc.npy', arr=pc)
     #######
@@ -236,8 +246,9 @@ if __name__ == '__main__':
     #######
 
     #fn.plot_freq_db(freq, x_win, normalize=False, domain='time')
-    #plt.plot(fftshift(freq), fftshift(20*np.log10(abs(np.fft.fft(x_win,axis=0)))))
-    plt.plot(fftshift(20 * np.log10(1e-1+abs(np.fft.fft(x_win, axis=0)))))
+    plt.plot(fftshift(freq), fftshift(20*np.log10(1e-1+abs(np.fft.fft(x_win,axis=0)))))
+    #plt.plot(fftshift(20 * np.log10(1e-1+abs(np.fft.fft(x_win, axis=0))))) # for padded signal
+    #plt.plot(fftshift(20 * np.log10(abs(np.fft.fft(x_win, axis=0))))) # for non-padded signal
     plt.title('FFT of Phase-coded Signal')
     plt.figure()
     plt.plot(x_win.real,'*-')
@@ -272,8 +283,8 @@ if __name__ == '__main__':
     pc_db = (20 * np.log10(abs(pc)))
     pc_db_normalized = pc_db - pc_db.max()
     plt.figure()
-    #plt.plot(distance, fftshift(pc_db), 'k*-')  # Matched Filter PC
-    plt.plot(fftshift(pc_db), 'k*-')
+    plt.plot((distance), (pc_db_normalized), 'k*-')  # Matched Filter PC
+    #plt.plot(fftshift(pc_db_normalized), 'k*-')
     #plt.plot( fftshift(pc_woo_db_normalized), 'k*-')  # Matched Filter PC
     #plt.plot( fftshift(pc_chirp_db_normalized), 'yo-')
     #plt.plot(fftshift(pc_woo_nowin_db_normalized), 'r^-')
@@ -281,8 +292,8 @@ if __name__ == '__main__':
     #plt.legend(['P4 code + window', 'Chirp + Window', 'P4 code without Window'])
     #plt.plot((distance), pc_dc_normalized,'k*-') # Matched Filter PC
     #plt.plot(fftshift(distance), fftshift(20 * np.log10(abs(pc))), 'k*-') # PC = mixer method
-    plt.xlabel('Sample Number')
-    #plt.xlabel('Distance [m]')
+    #plt.xlabel('Sample Number')
+    plt.xlabel('Distance [m]')
     plt.ylabel('Magnitude [dB]')
     plt.grid()
     #plt.xlim([-100, 1000])
@@ -296,4 +307,6 @@ if __name__ == '__main__':
     plt.xlabel('Frequency Resolutijon [MHz]')
     plt.xlabel('Range Resolutijon [m]')
     '''
+
+    fn.save_file_usrp(x_win_delay,N*M)
     plt.show()

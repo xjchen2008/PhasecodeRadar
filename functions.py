@@ -4,6 +4,23 @@ from numpy.fft import fftshift
 #import setup
 
 
+def save_file_usrp(y_cx_in,N):
+    ##################
+    # Save to file
+    ##################
+    y_cxnew = np.around(32767 * y_cx_in)  # np.multiply(y_cx,win)
+    yw = np.zeros(2 * N)
+    for i in range(0, N):
+        yw[2 * i + 1] = np.imag(y_cxnew[i])  # tx signal
+        yw[2 * i] = np.real(y_cxnew[i])  # tx signal
+    yw = np.int16(yw)  # E312 setting --type short
+    # yw = np.float32(yw)  # E312 setting --type float
+    # yw = np.float64(yw)  # E312 setting --type double
+    print(max(yw))
+    data = open('usrp_samples.dat', 'wb')
+    data.write(yw)
+    data.close()
+
 def dcblocker(x):
     X = np.fft.fft(x, axis = 0)
     #X[-1] = 0
@@ -97,7 +114,7 @@ def equalizer(x, y, input, scale=500):
 
 
 def PulseCompr(rx,tx,win, unit = 'log'):
-
+    N = len(rx)
     # Mixer method pulse compression; Return a log scale beat frequency signal.
     a = np.multiply(rx,win)  #np.power(win, 10)#np.multiply(win,win) # Add window here
     b = np.multiply(tx,np.power(win, 0))  #np.power(win, 10)#np.multiply(win,win)#tx
@@ -112,8 +129,8 @@ def PulseCompr(rx,tx,win, unit = 'log'):
     # match filter method
     A = np.fft.fft(a)
     B = np.fft.fft(b)
-    pc_mf = np.fft.ifft(np.multiply(B, np.conj(A)))
-
+    pc_mf = np.fft.ifft(np.multiply(A, np.conj(B)))
+    #pc_mf = np.convolve(upsampling(rx, 10), np.conj(upsampling(tx, 10))) # this is time domain without FFT and with interpolation
     # Matched Filter Method Convolution
     pc_mf_convolutionn = np.convolve(a,np.conj(b), 'same')
     if unit == 'log':
