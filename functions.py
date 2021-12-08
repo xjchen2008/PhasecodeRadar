@@ -134,9 +134,9 @@ def PulseCompr(rx,tx,win, unit = 'log'):
     # Matched Filter Method Convolution
     pc_mf_convolutionn = np.convolve(a,np.conj(b), 'same')
     if unit == 'log':
-        pc = 20 * np.log10(abs(pc_mf))
+        pc = 20 * np.log10(abs(pc_stretch))
     if unit =='linear':
-        pc = pc_mf
+        pc = pc_stretch
     return pc
 
 

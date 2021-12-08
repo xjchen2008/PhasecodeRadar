@@ -80,11 +80,11 @@ def wavetable(N, win= True, phi = 0):
     # Create the sine
     ##################
     # phase coding
-    #y_s = np.sin(1*2*np.pi*fs/N*t+ phi)#+ np.sin(4*np.pi*fs/N*t)# just use LO to generate a LO. The
-    #yq_s = np.sin(1*2*np.pi*fs/N*t-np.pi/2 + phi)# + np.sin(4*np.pi*fs/N*t-np.pi/2)
+    y_s = np.sin(1*2*np.pi*fs/N*t+ phi)#+ np.sin(4*np.pi*fs/N*t)# just use LO to generate a LO. The
+    yq_s = np.sin(1*2*np.pi*fs/N*t-np.pi/2 + phi)# + np.sin(4*np.pi*fs/N*t-np.pi/2)
     # No phase coding
-    y_s = np.sin(1 * 2 * np.pi * fs / N * t )  # + np.sin(4*np.pi*fs/N*t)# just use LO to generate a LO. The
-    yq_s = np.sin(1 * 2 * np.pi * fs / N * t - np.pi / 2 )  # + np.sin(4*np.pi*fs/N*t-np.pi/2)
+    #y_s = np.sin(1 * 2 * np.pi * fs / N * t )  # + np.sin(4*np.pi*fs/N*t)# just use LO to generate a LO. The
+    #yq_s = np.sin(1 * 2 * np.pi * fs / N * t - np.pi / 2 )  # + np.sin(4*np.pi*fs/N*t-np.pi/2)
 
     y_cx_sine1 = y_s + j * yq_s
     fo = 10e6
@@ -114,11 +114,11 @@ def wavetable(N, win= True, phi = 0):
                        #+ np.roll(y_cx_sine4_uprate, 128)
     y_cx_woo = fn.downsampling(y_cx_sine4_delay, uprate_)
 
-    y_cx_pad = np.pad(np.multiply(y_cx_chirp, win),180,'constant')
+    y_cx_pad = np.pad(np.multiply(y_cx_sine1, win),180,'constant')
     noise = np.random.normal(0, 1e-3, len(y_cx_pad))
     #plt.plot(phase_mod,'o-')
     #plt.show()
-    return y_cx_pad #np.multiply(y_cx_chirp, win) #np.multiply(y_cx_sine3, y_cx_sine3) #y_cx_sine4 #y_cx_pad +noise
+    return y_cx_sine1 #np.multiply(y_cx_chirp, win) #np.multiply(y_cx_sine3, y_cx_sine3) #y_cx_sine4 #y_cx_pad +noise
 
 
 def phasecode(M):
@@ -177,17 +177,17 @@ if __name__ == '__main__':
     c = 3e8
     j = 1j
 
-    a = 0.1
-    M =int(10) #int(50 /a)  # tune with Fp0 to increase range gate or range ambiguity
-    Fp0 = 500e3#16e3 * a # PRF Related to range resolution and range gate. full phase-coded signal is 1ms duration as FMCW SDR radar
+    a = 4
+    M =int(10*a) #int(50 /a)  # tune with Fp0 to increase range gate or range ambiguity
+    Fp0 = 500e3/a/1#16e3 * a # PRF Related to range resolution and range gate. full phase-coded signal is 1ms duration as FMCW SDR radar
     Fp = M * Fp0
     Tp0 = 1 / Fp0
     Tp = 1 / Fp
     k0 = 1# ralated to freq response
     fs = 200e6
     N = int(Tp * fs) #20
-    uprate = 2
-    roll = 121
+    uprate = 1
+    roll = 40*2
     bw = 40e6 #56e6  # FMCW chirp bandwidth 20e6#20e6#45.0e5
     print('bw=' , bw)
     '''N = 60
@@ -224,7 +224,7 @@ if __name__ == '__main__':
     x_win_uprate = fn.upsampling(x_win, uprate)
     x_win_uprate_roll = np.roll(x_win_uprate, roll)
     x_win_delay = fn.downsampling(x_win_uprate_roll, uprate)
-    x_win_delay = x_win #+np.roll(x_win, roll) #x_win_delay
+    x_win_delay = np.roll(x_win, roll) #x_win_delay
 
     #test()
 
@@ -245,18 +245,13 @@ if __name__ == '__main__':
     # Plot
     #######
 
-    #fn.plot_freq_db(freq, x_win, normalize=False, domain='time')
-    plt.plot(fftshift(freq), fftshift(20*np.log10(1e-1+abs(np.fft.fft(x_win,axis=0)))))
+    fn.plot_freq_db(freq, x_win, normalize=False, domain='time')
+    #plt.plot(fftshift(freq)/1e6, fftshift(20*np.log10(1e-1+abs(np.fft.fft(x_win,axis=0)))))
     #plt.plot(fftshift(20 * np.log10(1e-1+abs(np.fft.fft(x_win, axis=0))))) # for padded signal
     #plt.plot(fftshift(20 * np.log10(abs(np.fft.fft(x_win, axis=0))))) # for non-padded signal
     plt.title('FFT of Phase-coded Signal')
     plt.figure()
     plt.plot(x_win.real,'*-')
-
-
-
-
-
     plt.title('Phase-coded Signal')
     plt.figure()
     plt.plot(phi, '*-')
