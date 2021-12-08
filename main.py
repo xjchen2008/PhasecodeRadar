@@ -212,12 +212,11 @@ if __name__ == '__main__':
         #x = np.concatenate((x, coe.y_cx))
     #x = wavetable(N = M*N, phi = 0)
     freq = np.fft.fftfreq(len(x), d=1. / fs)
-    # distance = c/2* freq/(M*np.power(Fp0, 2))/k0#phase coding radar np.linspace(-0.5*Rmax, 0.5*Rmax, M*N) #M = Ng?
-    # distance = c / 2 * freq / (bw/Tp)#FMCW radar PC=Stretch Method
-    #distance = c/(2*freq) # matched filter method
-    Rmax1 = len(x) * c / (2*fs)  # 1/del_F *c/2
-    distance = np.linspace(0, Rmax1, len(x))  # FMCW PC=Matched Filter radar
 
+    Rmax1 = len(x) * c / (2*fs)  # 1/del_F *c/2
+    #distance = np.linspace(0, Rmax1, len(x))  # FMCW PC=Matched Filter radar
+    #distance = c / 2 * freq / (bw / Tp)  # FMCW radar PC=Stretch Method
+    distance = c/2* freq/(M*np.power(Fp0, 2))/k0#phase coding radar np.linspace(-0.5*Rmax, 0.5*Rmax, M*N) #M = Ng?
     win_all = 1
     #win_all = np.blackman(M*N)
     x_win = np.multiply(x, win_all)
