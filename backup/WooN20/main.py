@@ -13,6 +13,33 @@ from readbin import readbin2
 plt.rc('font', size=15)
 
 
+def wavetable_ref(N, win=True, phi=0):
+    n = np.linspace(0, N - 1, N)
+    y_p3 = np.sin(np.pi / N * np.power(n, 2))  # + np.sin(4*np.pi*fs/N*t)# just use LO to generate a LO. The
+    yq_p3 = np.sin(np.pi / N * np.power(n, 2) - np.pi / 2)  # + np.sin(4*np.pi*fs/N*t-np.pi/2)
+    y_cx_sine3 = y_p3 + j * yq_p3
+    y_p4 = np.sin(k0 * np.pi / N * n * (
+                n - N))  # + np.sin(4*np.pi*fs/N*t)# just use LO to generate a LO. k0 is related to the cycle/ period of the phase coding signal
+    yq_p4 = np.sin(k0 * np.pi / N * n * (n - N) - np.pi / 2)  # + np.sin(4*np.pi*fs/N*t-np.pi/2)
+    y_cx_sine4 = y_p4 + j * yq_p4
+    uprate_ = 1
+    y_cx_sine4_uprate = fn.upsampling(y_cx_sine4, uprate_)
+    y_cx_sine4_delay = np.roll(y_cx_sine4_uprate, 0) \
+                       + np.roll(y_cx_sine4_uprate, 1)  # \
+    # + np.roll(y_cx_sine4_uprate, 2) \
+    # + np.roll(y_cx_sine4_uprate, 4) + np.roll(y_cx_sine4_uprate, 8) \
+    # + np.roll(y_cx_sine4_uprate, 32) + np.roll(y_cx_sine4_uprate, 64) \
+    # + np.roll(y_cx_sine4_uprate, 128)
+    y_cx_woo = fn.downsampling(y_cx_sine4_delay, uprate_)
+
+    if win == True:
+        # win = np.power(np.hanning(N), 1)
+        win = np.abs(np.sin(np.pi * (-n + 0.5) / N))
+    else:
+        win = 1
+    return np.multiply(y_cx_woo, win)
+
+
 def wavetable(N, win=True, phi=0):
     #############
     # Parameters
@@ -25,7 +52,7 @@ def wavetable(N, win=True, phi=0):
     # n = np.concatenate([n2, (1.0+1.0*j)*np.zeros(int(N/2)), n1])
     # k0=1
     n = np.linspace(0, N - 1, N)
-    fc = 0e6 #15e6  # 50e6# 50e6#0e6
+    fc = 0 #15e6  # 50e6# 50e6#0e6
     f0 = fc - bw / 2  # -10e6#40e6 # Start Freq
     f1 = fc + bw / 2  # 10e6#60e6# fs/2=1/2*N/T#End freq
     # print('f0 = ',f0/1e6, 'MHz;', 'f1=', f1/1e6, 'MHz')
@@ -95,14 +122,12 @@ def wavetable(N, win=True, phi=0):
     # y_cx_pad = np.pad(np.multiply(y_cx_sine1, win),180,'constant') # for N= 40
     # y_cx_pad = np.pad(np.multiply(y_cx_sine1, win),190,'constant') # for N= 20
     #y_cx_pad = np.pad(np.multiply(y_cx_chirp, win), int((4000-N)/2), 'constant')  # for N= 20
-    N_zero = int((1000-N))  #  Editing padding position for SDR may not transmit samples at the beginning and end of the template signal.
-    #y_cx_pad = np.concatenate((np.zeros(600+305), np.multiply(y_cx_woo, win), np.zeros(55))) # the first 600 points cannot tx in X310, so zeros first.
-    y_cx_pad = np.concatenate((np.zeros(600 + 280+5), np.multiply(y_cx_chirp, win),
-                               np.zeros(80-5)))  # the first 600 points cannot tx in X310, so zeros first.
+    N_zero = int((1000-N))
+    y_cx_pad = np.concatenate((np.zeros(600), np.multiply(y_cx_woo, win), np.zeros(200))) # the first 600 points cannot tx in X310, so zeros first.
     noise = np.random.normal(0, 1e-3, len(y_cx_pad))
     # plt.plot(phase_mod,'o-')
     # plt.show()
-    return y_cx_pad #y_cx_pad #y_cx_pad  # np.multiply(y_cx_sine1, win) #y_cx_sine1 #np.multiply(y_cx_chirp, win) #np.multiply(y_cx_sine3, y_cx_sine3) #y_cx_sine4 #y_cx_pad +noise
+    return np.multiply(y_cx_woo, win) #y_cx_pad #y_cx_pad  # np.multiply(y_cx_sine1, win) #y_cx_sine1 #np.multiply(y_cx_chirp, win) #np.multiply(y_cx_sine3, y_cx_sine3) #y_cx_sine4 #y_cx_pad +noise
 
 
 def phasecode(M):
@@ -161,17 +186,17 @@ if __name__ == '__main__':
     j = 1j
     uprate = 2
     roll = 2 * 20 * 3 + 21  # 40*20+1
-    a = 40 #0.1 #40
+    a = .1#40 # .1#40
     M = int(10 * a)  # int(50 /a)  # tune with Fp0 to increase range gate or range ambiguity
-    Fp0 = 5e3 * 100/5/ a*5   # 16e3 * a # PRF Related to range resolution and range gate. full phase-coded signal is 1ms duration as FMCW SDR radar
+    Fp0 = 5e3 * 100/5/ a*1   # 16e3 * a # PRF Related to range resolution and range gate. full phase-coded signal is 1ms duration as FMCW SDR radar
     Fp = M * Fp0
     Tp0 = 1 / Fp0
     Tp = 1 / Fp
     k0 = 1  # ralated to freq response
-    fs = 200e6
+    fs = 20e6
     N = int(Tp * fs)  # 20
 
-    bw = 100e6  # 56e6  # FMCW chirp bandwidth 20e6#20e6#45.0e5
+    bw = 200e6  # 56e6  # FMCW chirp bandwidth 20e6#20e6#45.0e5
     print('bw=', bw)
     '''N = 60
     fs = N / Tp'''
@@ -190,7 +215,7 @@ if __name__ == '__main__':
     x = []
     for m in range(0, M):
         phi = phasecode(M)
-        x = np.concatenate((x, wavetable(N=N, win=True, phi=phi[m])))
+        x = np.concatenate((x, wavetable(N=N, win=False, phi=phi[m])))
         # x = np.concatenate((x, coe.y_cx))
     # x = wavetable(N = M*N, phi = 0)
     # x = readbin2("usrp_samples.dat", np.short, len(x), 0)
@@ -199,7 +224,8 @@ if __name__ == '__main__':
     Rmax1 = len(x) * c / (2 * fs)  # 1/del_F *c/2
     distance = np.linspace(0, Rmax1, len(x))  # FMCW PC=Matched Filter radar
     # distance = c / 2 * freq / (bw / Tp)  # FMCW radar PC=Stretch Method
-    #distance = 2 * c * freq / (M * np.power(Fp0, 2)) / k0  # phase coding radar np.linspace(-0.5*Rmax, 0.5*Rmax, M*N) #M = Ng?
+    #distance = 2 * c * freq / (
+    #            M * np.power(Fp0, 2)) / k0  # phase coding radar np.linspace(-0.5*Rmax, 0.5*Rmax, M*N) #M = Ng?
     win_all = 1
     # win_all = np.blackman(M*N)
     x_win = np.multiply(x, win_all)
@@ -209,7 +235,15 @@ if __name__ == '__main__':
     x_win_delay = x_win  # + x_win_delay #np.roll(x_win, roll) #
 
     # test()
-    '''
+    #'''
+    #
+    # x_win_BPF_real = dsp_filters_BPF.run(x_win.real,fs=fs, highcut=15e6, lowcut=5e6)
+    # x_win_BPF = hilbert(x_win_BPF_real)
+    # x_win = x_win_BPF
+    # x_win_0 = np.concatenate((np.array([0]), x_win[0:-1]))
+    # x_win_0 = x_win[0:-1]
+    x_win_0 = wavetable_ref(N=N - 1, win=True, phi=phi[m])
+    x_win_0_full = np.concatenate((np.array([0]), x_win_0))
     pc = fn.PulseCompr(rx=x_win_delay, tx=x_win, win=1, unit='linear')
     # pc = fn.PulseCompr(rx = hilbert(x_win_delay.real), tx = hilbert(x_win.real), win = 1, unit='linear')
     # pc = fn.PulseCompr(rx=x_win_delay.real, tx=x_win.real, win=1, unit='linear')
@@ -266,9 +300,9 @@ if __name__ == '__main__':
     plt.ylabel('Magnitude [dB]')
     plt.title('Pulse Compression')
     plt.grid()
-    plt.xlim([-100, 1000])
-
+    #plt.xlim([-100, 1000])
 
     #'''
+
     fn.save_file_usrp(x_win_delay, len(x))
     plt.show()
